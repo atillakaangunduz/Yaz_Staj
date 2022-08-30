@@ -1,0 +1,172 @@
+SELECT * from emp; ORDER by empno ;
+SELECT * from dept;
+SELECT ename as ISIM , JOB GOREV  from emp;
+SELECT ename as ISIM , SAL MAAS from emp;  --4
+SELECT empno , SUM(SAL) from emp GROUP BY empno ORDER by empno ;
+SELECT ename as ISIM , SAL*12 "YILLIK MAAS" from EMP;
+SELECT ename as ISIM from emp WHERE DEPTNO = 10;
+SELECT ename as ISIM from emp WHERE SAL > 3000 and  JOB = 'CLERK';
+SELECT empno , ename from emp where comm != 0;
+SELECT empno , ename from emp where comm = 0 or comm is NULL;
+SELECT ename from emp where (job= 'ANALYST'or job='SALESMAN' or job='CLERK') and sal > 3000;
+SELECT ename from emp where  SYSDATE- HIREDATE >5;
+SELECT * from emp where HIREDATE < TO_DATE('30/06/1990','DD/MM/YYYY') or HIREDATE > TO_DATE('31/12/1990','DD/MM/YYYY')   ;
+SELECT SYSDATE FROM DUAL;
+SELECT * from ALL_USERS;
+SELECT * from USER_USERS;
+SELECT ename from emp where  DEPTNO = 10 or DEPTNO = 20 or DEPTNO = 40 or JOB = 'CLERK' or job= 'ANALYST'or job='SALESMAN';
+
+SELECT ename from emp where ename = 'S%';
+SELECT ename from emp where ename = '%S';
+SELECT ename from emp where ename = '_A%';
+SELECT ename from emp where LENGTH(ename) = 5;
+SELECT ename from emp where not JOB = 'MANAGER';
+SELECT ename from emp where not  (JOB = 'CLERK' or job = 'ANALYST'or job='SALESMAN');
+
+SELECT COUNT(empno) from emp;
+SELECT SUM(SAL) from emp;
+SELECT MAX(SAL) from emp;
+SELECT Min(SAL) from emp;
+SELECT AVG(SAL) from emp;
+SELECT MAX(SAL) from emp WHERE JOB = 'CLERK'; 
+SELECT MAX(SAL) from emp WHERE deptno = 20; 
+SELECT Min(SAL) from emp WHERE JOB = 'SALESMAN'; 
+SELECT AVG(SAL) from emp WHERE JOB = 'MANAGER'; 
+SELECT SUM(SAL) from emp WHERE JOB = 'ANALYST' and deptno= 40; 
+SELECT ename from emp ORDER by sal ;
+SELECT ename from emp ORDER by sal desc ;
+SELECT ename from emp ORDER by ename ;
+SELECT empno,ename,deptno,sal from emp order by ename,deptno,sal;
+SELECT ename ,sal*12 as yilmaas from emp order by yilmaas desc;
+SELECT ename , sal, sal*15/100 as hra , sal*0.10 as da,sal*0.05 as pf,(sal+hra+da)-pf as totalsal from emp order by totalsal;--hata var
+SELECT deptno , COUNT(ename) from emp GROUP by deptno;
+SELECT job , COUNT(job) from emp GROUP by job; 
+SELECT deptno , sum(sal) from emp GROUP by deptno;
+SELECT deptno , max(sal) from emp GROUP by deptno;
+SELECT job , sum(sal) from emp GROUP by job; 
+SELECT deptno from emp having COUNT(empno) > 3  GROUP BY deptno; ---27.07.2022
+SELECT job from emp having sum(sal) > 40000 GROUP by job ;
+SELECT job , count(empno) from emp having COUNT(empno) > 3  GROUP BY job;
+Select ename,sal from emp where sal = (SELECT max(sal) from emp);
+SELECT empno , ename, max(sal) from emp where job = 'CLERK' GROUP BY empno,ename ; --
+SELECT ename from emp where job='SALESMAN' and sal>(Select max(sal) from emp where job='CLERK');
+SELECT ename from emp where job='CLERK' and sal>(Select min(sal) from emp where job='SALESMAN');
+SELECT ename from emp where sal>(Select sal from emp where ename='JONES'); or sal > (Select sal from emp where ename='SCOTT');
+Select ename,job from emp where sal = (SELECT max(sal),job from emp);
+SELECT E.ENAME, E.job FROM EMP E WHERE SAL IN (SELECT MAX(SAL) FROM EMP E GROUP BY job);
+SELECT E.ENAME FROM EMP E, DEPT D WHERE E.DEPTNO=D.DEPTNO AND D.DNAME='ACCOUNTING';
+SELECT E.ENAME from emp E , DEPT D where  E.DEPTNO=D.DEPTNO and d.loc = 'CHICAGO';
+SELECT Job from emp GROUP by JOB having sum(sal) > (select max(sal)from emp where job='MANAGER');
+SELECT E.ENAME FROM EMP E WHERE E.DEPTNO=10 AND E.SAL > ANY (SELECT SAL FROM EMP  WHERE DEPTNO!=10);
+SELECT E.ENAME FROM EMP E WHERE E.DEPTNO=10 AND E.SAL > ALL (SELECT SAL FROM EMP  WHERE DEPTNO!=10);
+SELECT UPPER(ENAME) FROM EMP;
+SELECT LOWER(ENAME) FROM EMP;
+SELECT INITCAP(ENAME) FROM EMP;
+SELECT LENGTH('ATİLLA') FROM DUAL;
+SELECT LENGTH(ENAME) FROM EMP;
+SELECT ENAME || ' ' || empno from emp;
+SELECT SUBSTR('ORACLE',3,2) from DUAL;
+SELECT INSTR('Computer Maintenance Corporation','a',1,1) from DUAL;
+SELECT REPLACE('Allens','A','B') from dual;
+SELECT empno ,ename, REPLACE(Job,'MANAGER','BOSS')  from emp;
+SELECT empno,ename,DECODE(DEPTNO,10,'ACCOUNTING',20,'RESEARCH',30,'SALES',40,'OPERATIONS') from emp; 
+SELECT ROUND(SYSDATE - TO_DATE('27-07-2001','DD-MM-YYYY'))/360 from dual;
+SELECT FLOOR (MONTHS_BETWEEN (SYSDATE, TO_DATE ('27-07-2001','DD-MM-YYYY')))/12 AS AGE_IN_MONTHS FROM DUAL;
+SELECT TO_CHAR(SYSDATE,'DDTH MONTH DAY YEAR') AS TODAY FROM DUAL;
+SELECT ename||' ' ||TO_CHAR(HIREDATE,'DDTH MONTH DAY YEAR') from emp;
+SELECT NEXT_DAY (SYSDATE, 'SATURDAY') FROM DUAL;
+SELECT SYSDATE FROM DUAL;
+SELECT ADD_MONTHS(SYSDATE,-3) from DUAL;
+SELECT job from emp where deptno = 10 and JOB in (SELECT job from emp where deptno = 20);
+SELECT job from emp where not (deptno = 10 and JOB in (SELECT job from emp where deptno = 20)) minus SELECT job from emp where deptno = 10 and JOB in (SELECT job from emp where deptno = 20);
+SELECT job from emp where deptno = 10 minus select job from emp where deptno != 10;
+SELECT * from emp where empno not in (select mgr from emp where mgr is not null);
+SELECT e.ename , e.empno,e.job from emp e,SALGRADE s where e.deptno = (Select deptno from dept where dname='SALES') and s.grade = 3;
+SELECT * from emp where empno in (select mgr from emp where mgr is not null);
+SELECT ename from emp having not LENGTH(ename) < 4 GROUP by ename
+select dname from dept where dname ='S%' and loc = '%k';
+Select ename from emp where  mgr = (select empno from emp where ENAME = 'JONES');
+Select * from emp where sal*1.2 > 3000;
+SELECT e.ename , d.dname from emp e , dept d where e.deptno = d.deptno;  
+SELECT e.ename , d.dname from emp e , dept d where e.deptno = d.deptno and d.dname in 'SALES';  
+SELECT E.ENAME, D.DNAME, E.SAL, E.COMM FROM EMP E, DEPT D WHERE E.DEPTNO=D.DEPTNO AND D.LOC='CHICAGO' AND E.SAL BETWEEN 2000 AND 5000;
+SELECT E.* FROM EMP E, EMP E1 WHERE E.MGR = E1.EMPNO AND E.SAL>=E1.SAL;
+Select e.* from emp e , emp e1 where e.mgr = e1.empno and e.deptno = e1.deptno;
+SELECT * from emp where mgr is null;
+SELECT distinct e.ename from emp e,SALGRADE s where s.grade !=3 and deptno=10 or deptno=30  and HIREDATE < to_date('31/12/1982','DD,MM,YYYY');
+UPDATE EMP2 SET SAL=(SAL+0.10*SAL) WHERE COMM IS NULL OR COMM=0; 
+SELECT e.ename from emp e, dept d where loc = 'CHICAGO' and HIREDATE > to_date('31/12/1982','DD,MM,YYYY');
+SELECT distinct e.ename,e.job,d.dname,d.loc from emp e , dept d where e.empno  in (select mgr from emp where mgr is not null);
+Select ename from emp where  mgr = (select empno from emp where ENAME = 'JONES');
+select ename,sal,grade from emp,salgrade where sal between losal and hisal and ename ='FORD' AND HISAL=SAL;
+Select e.ename,e.job,d.dname,e.mgr,s.grade from emp e, dept d, salgrade s;
+Select  e.ename,e.job,d.dname,e.mgr,s.grade from emp e, dept d, salgrade s where e.job != 'CLERK' ORDER by sal desc;
+select e.ename,e.job,eMP.ename AS Manager from emp,emp e where emp.empno(+)=e.mgr
+SELECT DISTINCT SAL FROM EMP E WHERE 5>=(SELECT COUNT(DISTINCT SAL) FROM EMP A WHERE A.SAL>=E.SAL)ORDER BY SAL DESC;
+SELECT ename from emp where sal = (select max(sal) from emp);
+select ename from emp where sal=(select max(sal)+min(sal)/2 from emp);
+select count(*) from emp group by deptno having count(deptno)>3
+select distinct d.dname from dept d,emp e where d.deptno=e.deptno and 3> any (select count(deptno) from emp group by deptno);
+select ename from emp where sal > (select AVG(sal) from emp) and job = 'MANAGER';
+SELECT DISTINCT EMP.ENAME FROM EMP,EMP E WHERE E.SAL <(SELECT AVG(EMP.SAL) FROM EMP WHERE EMP.EMPNO=E.MGR GROUP BY EMP.ENAME) AND EMP.EMPNO=E.MGR;
+select ename,sal,comm,sal+nvl(comm,0) as NetPay from emp where sal+nvl(comm,0) >any (select sal from emp);
+SELECT ENAME,(SELECT SUM(SAL) FROM EMP) FROM EMP;
+SELECT DISTINCT SAL FROM EMP E WHERE 5>=(SELECT COUNT(DISTINCT SAL) FROM EMP A WHERE A.SAL<=E.SAL) ORDER BY SAL DESC;
+SELECT E.ENAME FROM EMP ,EMP E WHERE EMP.EMPNO=E.MGR AND EMP.SAL<E.SAL;
+SELECT dname from dept d ,emp e where e.deptno = d.deptno and e.ename is null and e.ename=0 ; 
+SELECT * FROM emp WHERE mod(sal,2) = 1;
+select * from emp where length(sal)>=3;
+select ename from emp where to_char(hiredate,'MON')='DEC';
+select ename from emp where ename = '%a%' or ename='%A%';--28.07.2022
+select e.ename from emp e where e.sal = e.deptno;
+select ename , SUBSTR(hiredate,1,2), SUBSTR(sal,-2,2) from emp;
+select ename from emp where to_char(hiredate,'YY') = sal*0.1;
+select ename from emp where deptno in (select deptno from dept where dname='SALES' or dname='RESEARCH');
+select grade from SALGRADE , emp where ename = 'JONES' and  SAL BETWEEN LOSAL AND HISAL;
+select ename from emp where 15 <to_char(hiredate,'DD');
+select ename from emp where 15 >to_char(hiredate,'DD');
+delete from emp where deptno(select deptno from emp group by deptno having count(deptno)<3);
+select deptno from emp having Count(deptno) = 0 or Count(deptno) is null group by deptno;  
+Select distinct e.ename from emp e,emp m where e.empno = m.mgr;
+SELECT ENAME,GRADE FROM EMP,SALGRADE WHERE GRADE NOT IN(SELECT SUBSTR(SAL,0,1)FROM EMP);
+select ename from emp where mgr = (select empno from emp where ename='BLAKE' );
+select ename from emp where sal > (select max(avg(sal)) from emp group by deptno);
+select * from emp where rownum < 11 minus select * from emp where rownum < 10 ;
+SELECT  SUBSTR(UPPER(ENAME),1,(LENGTH(ename)/2))||SUBSTR(LOWER(ENAME),(LENGTH(ename)/2+1),LENGTH(ENAME)) FROM EMP;
+select * from emp where rownum < 11 minus select * from emp where rownum < 10 ;
+Create table  emp2 as select * from emp where 1=2; 
+select ename from emp group by ename having count(ename)>1;
+select ename ,reverse(ename) from emp;
+select ename from emp , salgrade where to_char(hiredate,'MM') = grade;
+select ename from emp where to_char(hiredate,'DD') = empno;
+select ename ,SUBSTR(ename,1,1) FROM emp;
+select ename,sal,sal*0.2 PF from emp;
+create table emp2 as select empno from emp where 1=2;
+ALTER TABLE emp2 add(ename varchar2(20));
+alter table emp2 add primary key(empno);
+ALTER TABLE emp2 modify(ename varchar2(30));
+ALTER TABLE emp2 add(sal number);
+alter table emp2 add constraint csal check(sal<=10000);
+alter table emp2 drop constraint csal;
+alter table emp2 add constraint csal check(sal<=10000);
+alter table emp2 add(mgr number(5));
+alter table emp2 add constraint fk_mgr_emp FOREIGN KEY (MGR) references emp2(empno);
+alter table emp2 add(deptno number(5));
+alter table emp add constraint fk_emp_dep foreign key(deptno) reference dept(deptno);
+-----------------
+create table newemp as select * from emp where 1=2;
+delete from emp where 2<((sysdate - hiredate)/365);
+select sal*0.1 from emp where comm is null
+update emp set comm=sal*.1 where comm is not null;
+select e.ename , d.dname from emp e ,dept d WHERE e.deptno = d.deptno;
+select e.ename , d.dname,d.loc,e.empno from emp e ,dept d WHERE e.deptno = d.deptno;
+select e.ename , d.dname from emp e ,dept d WHERE e.deptno = d.deptno(+);
+select p.ename,e.ename from emp e,emp p where e.empno=p.mgr; ---
+select count(e.ename) , d.dname from emp e ,dept d WHERE e.deptno = d.deptno group by d.dname;
+select sum(e.sal) , d.dname from emp e ,dept d WHERE e.deptno = d.deptno group by d.dname;
+-------------------
+delete from emp where count(*)>1;
+select ename from emp where rowid in (select rowid from emp where rownum<=7 minus select rowid from emp where rownum<5);
+Select sal from (select sal from emp order by sal desc ) where ROWNUM<10
+Select sal from (select sal from emp order by sal desc ) where ROWNUM<4
+SELECT ENAME FROM EMP WHERE ROWID=(SELECT ROWID FROM EMP WHERE ROWNUM<=10 MINUS SELECT ROWID FROM EMP WHERE ROWNUM <10);
